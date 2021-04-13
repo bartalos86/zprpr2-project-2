@@ -27,22 +27,19 @@ typedef struct room
 void free_guests(Guest **guestsHead)
 {
     Guest *temp = *guestsHead, *prev;
-    int freed = 0;
     while (temp->next != NULL)
     {
         prev = temp;
         temp = temp->next;
 
         free(prev);
-        freed++;
     }
 
     free(temp);
-    freed++;
+ 
 
     *guestsHead = NULL;
 
-    printf("Guests freed: %d\n", freed);
 }
 
 void free_rooms(Room **roomsHead)
@@ -121,6 +118,8 @@ void n(FILE **hotel, Room **rooms_head)
 
     int roomsLoaded = 0;
     Room *prevRoom = NULL;
+
+    rewind(*hotel);
 
     while (fscanf(*hotel, "---\n%d\n%d\n%lf\n", &tempRoomNum, &tempPCBed, &tempPrice) > 0)
     {
