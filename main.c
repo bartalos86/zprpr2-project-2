@@ -36,10 +36,8 @@ void free_guests(Guest **guestsHead)
     }
 
     free(temp);
- 
 
     *guestsHead = NULL;
-
 }
 
 void free_rooms(Room **roomsHead)
@@ -53,7 +51,7 @@ void free_rooms(Room **roomsHead)
         free_guests(&(prev->guest_list));
         free(prev);
     }
-    free_guests(&temp->guest_list);
+    free_guests(&(temp->guest_list));
 
     *roomsHead = NULL;
     free(temp);
@@ -64,13 +62,14 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
 
     if (*hotel == NULL)
     {
+        printf("Situacia bezpresného zadania\n");
         return;
     }
 
     //TODO: ez nem jol mukodik - Open again for overwriting
     if (overwrite)
     {
-        if(*hotel != NULL)
+        if (*hotel != NULL)
             fclose(*hotel);
 
         if ((*hotel = fopen("hotel.txt", "w+")) == NULL)
@@ -96,8 +95,10 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
 
 void n(FILE **hotel, Room **rooms_head)
 {
+
     if (*rooms_head != NULL)
     {
+        printf("freeing\n");
         free_rooms(rooms_head);
         *rooms_head = NULL;
     }
@@ -127,6 +128,7 @@ void n(FILE **hotel, Room **rooms_head)
         room->number = tempRoomNum;
         room->bed_count = tempPCBed;
         room->price = tempPrice;
+        room->next = NULL;
 
         Guest *prevGuest = NULL;
 
@@ -138,6 +140,7 @@ void n(FILE **hotel, Room **rooms_head)
             strcpy(guest->address, tempAddress);
             guest->reserve_begin = tempStartDate;
             guest->reserve_end = tempEndDate;
+            guest->next = NULL;
 
             if (prevGuest == NULL)
             {
@@ -434,6 +437,11 @@ void h(Room *rooms_head)
 
     if (prev != NULL)
         free(prev);
+
+    if (foundList == NULL)
+    {
+        printf("K datumu %d neevidujeme rezervaciu.\n", date);
+    }
 }
 
 void a(FILE **hotel, Room *rooms_head)
@@ -463,6 +471,7 @@ int main()
 
     while (!exit)
     {
+        fflush(stdin);
         scanf("%c", &input);
         fflush(stdin);
         switch (input)

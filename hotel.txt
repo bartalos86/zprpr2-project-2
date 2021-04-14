@@ -16,6 +16,11 @@ Michal Novak
 Malinova 97, Bratislava
 20210514
 20210519
+#
+Tomas Kovac
+Jahodova 3, Bratislava
+20210414
+20210432
 ---
 301
 2
