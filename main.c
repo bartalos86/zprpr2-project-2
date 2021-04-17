@@ -62,7 +62,6 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
 
     if (*hotel == NULL)
     {
-        printf("Situacia bez presného zadania\n");
         return;
     }
 
@@ -70,15 +69,14 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
     //We must erase the file when overwriting, only erase if it was opened before
     if (overwrite && *hotel != NULL)
     {
-            fclose(*hotel);
+        fclose(*hotel);
 
         if ((*hotel = fopen("hotel.txt", "w+")) == NULL)
         {
             return;
         }
 
-
-       /* rewind(*hotel);
+        /* rewind(*hotel);
         int lineCount = 0;
         char lineBuffer[101];
         while(fgets(lineBuffer,100,*hotel) != NULL){
@@ -118,7 +116,6 @@ void n(FILE **hotel, Room **rooms_head)
 
     if (*rooms_head != NULL)
     {
-        //printf("freeing\n");
         free_rooms(rooms_head);
         *rooms_head = NULL;
     }
@@ -199,20 +196,6 @@ void v(Room *rooms_head)
     if (rooms_head == NULL)
         return;
 
-    /*Room *sorted_rooms = malloc(sizeof(Room));
-
-    Room *current = rooms_head;
-    while (current != NULL)
-    {
-        if (sorted_rooms == NULL)
-        {
-            inroom->bed_count = next->bed_count;
-            inroom->price = next->price;
-            inroom->guest_list = next->guest_list;
-        }
-    }*/
-
-    //memcpy(sorted_rooms, rooms_head, sizeof(Room));
 
     //TODO: Bubble sort
     for (Room *room = rooms_head; room != NULL; room = room->next)
@@ -261,13 +244,17 @@ void v(Room *rooms_head)
     //free_rooms(&sorted_rooms);
 }
 
-void r(FILE **hotel, Room *rooms_head)
+void r(FILE **hotel, Room **rooms_head)
 {
+    if(*hotel == NULL){
+        return;
+    }
+
     int number, bedCount, guestCount;
     double price;
 
     scanf("%d\n%d\n%lf\n%d\n", &number, &bedCount, &price, &guestCount);
-    Room *lastRoom, *current = rooms_head;
+    Room *lastRoom, *current = *rooms_head;
     while (current != NULL)
     {
         lastRoom = current;
@@ -279,6 +266,8 @@ void r(FILE **hotel, Room *rooms_head)
     newRoom->bed_count = bedCount;
     newRoom->price = price;
     newRoom->next = NULL;
+
+    if(lastRoom != NULL)
     lastRoom->next = newRoom;
 
     char nameBuffer[51], addressBuffer[101];
@@ -318,11 +307,23 @@ void r(FILE **hotel, Room *rooms_head)
 
     newRoom->guest_list = guest_head;
 
-    write_to_file(hotel, rooms_head, 0);
+    if(*rooms_head == NULL){
+        *rooms_head = newRoom;
+    }
+
+        write_to_file(hotel, *rooms_head, 0);
+    
 }
 
 void z(FILE **hotel, Room **room_head)
 {
+
+    if (*room_head == NULL || *hotel == NULL)
+    {
+        printf("Situacia bez presného zadania\n");
+        return;
+    }
+
     int roomNum;
     scanf("%d", &roomNum);
 
@@ -365,6 +366,12 @@ void z(FILE **hotel, Room **room_head)
 
 void h(Room *rooms_head)
 {
+    if (rooms_head == NULL)
+    {
+        printf("Situacia bez presného zadania\n");
+        return;
+    }
+
     int date;
     scanf("%d", &date);
 
@@ -468,6 +475,12 @@ void h(Room *rooms_head)
 
 void a(FILE **hotel, Room *rooms_head)
 {
+    if (*hotel == NULL || rooms_head == NULL)
+    {
+        printf("Situacia bez presného zadania\n");
+        return;
+    }
+
     int roomNumber, newBedCount;
     scanf("%d\n%d", &roomNumber, &newBedCount);
     for (Room *room = rooms_head; room != NULL; room = room->next)
@@ -505,7 +518,7 @@ int main()
             v(rooms_head);
             break;
         case 'r':
-            r(&hotel, rooms_head);
+            r(&hotel, &rooms_head);
             break;
         case 'z':
             z(&hotel, &rooms_head);
