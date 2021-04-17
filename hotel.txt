@@ -23,7 +23,7 @@ Jahodova 3, Bratislava
 20210432
 ---
 301
-2
+11
 57.56
 #
 gergo bartalos

@@ -62,20 +62,40 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
 
     if (*hotel == NULL)
     {
-        printf("Situacia bezpresného zadania\n");
+        printf("Situacia bez presného zadania\n");
         return;
     }
 
     //TODO: ez nem jol mukodik - Open again for overwriting
-    if (overwrite)
+    //We must erase the file when overwriting, only erase if it was opened before
+    if (overwrite && *hotel != NULL)
     {
-        if (*hotel != NULL)
             fclose(*hotel);
 
         if ((*hotel = fopen("hotel.txt", "w+")) == NULL)
         {
             return;
         }
+
+
+       /* rewind(*hotel);
+        int lineCount = 0;
+        char lineBuffer[101];
+        while(fgets(lineBuffer,100,*hotel) != NULL){
+            lineCount++;
+        }
+        rewind(*hotel);
+
+        printf("%d", lineCount);
+        char buff[] = {-1};
+
+        for (int i = 0; i < lineCount*100; i++)
+        {
+            // fputs("", *hotel);
+            fwrite(buff, 1, 1, *hotel);
+
+        }*/
+        //fwrite("", 100, lineCount, *hotel);
     }
 
     rewind(*hotel);
@@ -98,7 +118,7 @@ void n(FILE **hotel, Room **rooms_head)
 
     if (*rooms_head != NULL)
     {
-        printf("freeing\n");
+        //printf("freeing\n");
         free_rooms(rooms_head);
         *rooms_head = NULL;
     }
@@ -293,6 +313,8 @@ void r(FILE **hotel, Room *rooms_head)
 
         prevGuest = currentGuest;
     }
+
+    prevGuest->next = NULL;
 
     newRoom->guest_list = guest_head;
 
