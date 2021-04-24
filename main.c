@@ -65,9 +65,8 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
         return;
     }
 
-    //TODO: ez nem jol mukodik - Open again for overwriting
     //We must erase the file when overwriting, only erase if it was opened before
-    if (overwrite && *hotel != NULL)
+    if (overwrite)
     {
         fclose(*hotel);
 
@@ -76,24 +75,6 @@ void write_to_file(FILE **hotel, Room *rooms_head, int overwrite)
             return;
         }
 
-        /* rewind(*hotel);
-        int lineCount = 0;
-        char lineBuffer[101];
-        while(fgets(lineBuffer,100,*hotel) != NULL){
-            lineCount++;
-        }
-        rewind(*hotel);
-
-        printf("%d", lineCount);
-        char buff[] = {-1};
-
-        for (int i = 0; i < lineCount*100; i++)
-        {
-            // fputs("", *hotel);
-            fwrite(buff, 1, 1, *hotel);
-
-        }*/
-        //fwrite("", 100, lineCount, *hotel);
     }
 
     rewind(*hotel);
@@ -127,6 +108,7 @@ void n(FILE **hotel, Room **rooms_head)
         if (*hotel == NULL)
         {
             printf("Zaznamy neboli nacitane\n");
+            return;
         }
     }
 
@@ -182,7 +164,6 @@ void n(FILE **hotel, Room **rooms_head)
             prevRoom = room;
         }
 
-        // fscanf(*hotel, "---");
 
         roomsLoaded++;
     }
@@ -197,7 +178,7 @@ void v(Room *rooms_head)
         return;
 
 
-    //TODO: Bubble sort
+    //Bubble sort
     for (Room *room = rooms_head; room != NULL; room = room->next)
     {
         for (Room *inroom = room; inroom != NULL; inroom = inroom->next)
@@ -241,7 +222,6 @@ void v(Room *rooms_head)
             printf("----------------------------\n----------------------------\n");
     }
 
-    //free_rooms(&sorted_rooms);
 }
 
 void r(FILE **hotel, Room **rooms_head)
@@ -276,12 +256,10 @@ void r(FILE **hotel, Room **rooms_head)
     Guest *guest_head = NULL;
     Guest *prevGuest = NULL;
 
-    //printf("Guest count: %d\n", guestCount);
 
     for (int i = 0; i < guestCount; i++)
     {
         Guest *currentGuest = malloc(sizeof(Guest));
-        // pirntf("one\n");
         if (i == guestCount - 1)
             fscanf(stdin, "%[^\n]\n%[^\n]\n%d\n%d", nameBuffer, addressBuffer, &startDate, &endDate);
         else
@@ -386,7 +364,7 @@ void h(Room *rooms_head)
     for (Room *room = rooms_head; room != NULL; room = room->next)
     {
         int isFound = 0;
-        //fprintf(hotel,"---\n%d\n%d\n%g\n", room->number, room->bed_count, room->price);
+       
 
         for (Guest *guest = room->guest_list; guest != NULL; guest = guest->next)
         {
@@ -394,7 +372,6 @@ void h(Room *rooms_head)
             {
                 isFound = 1;
             }
-            //fprintf(hotel,"#\n%s\n%s\n%d\n%d\n", guest->name, guest->address, guest->reserve_begin, guest->reserve_end);
         }
 
         if (isFound)
@@ -449,7 +426,6 @@ void h(Room *rooms_head)
                 }
             }
 
-            // prevFount = room->number;
         }
     }
 
